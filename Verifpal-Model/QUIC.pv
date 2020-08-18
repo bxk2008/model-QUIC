@@ -1,0 +1,128 @@
+(* QUIC model for ProVerif *)
+
+(* For IEEE Access *)
+
+
+(* Diffie-Hellman Function *)
+
+type G.
+type exponent.
+
+const g:G.
+fun exp(G,exponent):G.
+
+equation forall x: exponent, y: exponent; exp(exp(g,x),y)=exp(exp(g,y),x).
+
+
+
+
+
+(* Symmetric key encryption for message *)
+
+fun enc(bitstring, G): bitstring.
+reduc forall x: bitstring, y: G; dec(enc(x,y),y) = x.
+
+
+
+
+(* Symmetric key encryption for public value *)
+
+fun encP(G, G): G.
+reduc forall x: G, y: G; decP(encP(x,y),y) = x.
+
+
+
+
+(* Digital signatures *)
+
+type skey.
+type pkey.
+
+fun pk(skey):pkey.
+fun sign(G, skey): bitstring.
+
+reduc forall m: G, k: skey; getmess(sign(m,k)) = m.
+reduc forall m: G, k: skey; checksign(sign(m,k), pk(k)) = m.
+
+
+
+
+free c:channel.
+free CHLO:bitstring.
+free CertServer:bitstring.
+(*free ReqM:bitstring [private].*)
+(*free ResM:bitstring [private].*)
+
+(*query attacker(new CEPri).*)
+(*query attacker(new LPri).*)
+(*query attacker(new SEPri).*)
+(*query attacker(new ssprk).*)
+query attacker(new ReqM).
+query attacker(new ResM).
+
+
+event sendReqM(bitstring).
+event acceptReqM(bitstring).
+query x:bitstring; inj-event(acceptReqM(x))==>inj-event(sendReqM(x)).
+
+event sendResM(bitstring).
+event acceptResM(bitstring).
+query x:bitstring; inj-event(acceptResM(x))==>inj-event(sendResM(x)).
+
+event InitC(bitstring).
+event EndS(bitstring).
+query x:bitstring; inj-event(EndS(x))==>inj-event(InitC(x)).
+
+event InitS(G).
+event EndC(G).
+query x:G; inj-event(EndC(x))==>inj-event(InitS(x)).
+
+let Client(pkS:pkey,InitKC:G) =
+	out(c,CHLO);
+	in(c,(x1:G,x2:bitstring,x3:bitstring,x4:bitstring,pkX:pkey));
+	if x3 = CertServer then
+	if pkX = pkS then
+	let (=x1) = checksign(x2,pkX) in
+	new CEPri: exponent;
+	let InitKC = exp(x1,CEPri) in
+	new ReqM:bitstring;
+	event InitC(CHLO);
+	event sendReqM(ReqM);
+	out(c,(exp(g,CEPri),enc(ReqM,InitKC)));
+	in(c,(x5:G,x6:bitstring));
+	let x7 = decP(x5,InitKC) in
+	let FSKC = exp(x7,CEPri) in
+	let ResMx = dec(x6,FSKC) in
+	event acceptResM(ResMx);
+	event EndC(x1).
+	
+
+let Server(skS:skey,pkS:pkey,InitKS:G) =
+	in(c,x1:bitstring);
+	if x1 = CHLO then
+	new LPri: exponent;
+	new Token: bitstring;
+	out(c,(exp(g,LPri),sign(exp(g,LPri),skS),CertServer,Token,pkS));
+	in(c,(x2:G,x3:bitstring));
+	let InitKS = exp(x2,LPri) in
+	let ReqMx = dec(x3,InitKS) in
+	event acceptReqM(ReqMx);
+	new SEPri: exponent;
+	let SEPub = exp(g,SEPri) in
+	let FSKS = exp(x2,SEPri) in
+	new ResM:bitstring;
+	event InitS(exp(g,LPri));
+	event sendResM(ResM);
+	out(c,(encP(SEPub,InitKS),enc(ResM,FSKS)));
+	event EndS(x1).
+	(*phase 1; out(c,FSKS).*)
+
+
+process
+	new InitKC: G;
+	new InitKS: G;
+	new skS:skey;
+	let pkS = pk(skS) in 
+	out(c,pkS);
+	( (!Client(pkS,InitKC))  | (!Server(skS,pkS,InitKS)))
+	

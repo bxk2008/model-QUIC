@@ -1,0 +1,75 @@
+digraph {
+graph [ordering = out]
+edge [arrowhead = none, penwidth = 1.6, fontsize = 30]
+node [shape = point, width = 0, height = 0, fontsize = 30]
+Trace [label = <A trace has been found.<br/>
+>, shape = plaintext]
+P0__0 [label = "Honest Process", shape = plaintext]
+P__0 [label = "Attacker", shape = plaintext]
+Trace -> P0__0 [label = "", style = invisible, weight = 100]{rank = same; P0__0 P__0}
+P0__0 -> P0__1 [label = <>, weight = 100]
+P0__1 -> P0__2 [label = <>, weight = 100]
+P0__2 [shape = plaintext, label = <<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"> <TR><TD><FONT COLOR="darkgreen">{1}</FONT><FONT COLOR="blue">new </FONT>ssprk_6749</TD></TR></TABLE>>]
+P0__2 -> P0__3 [label = <>, weight = 100]
+P0__3 -> P0__4 [label = <>, weight = 100]
+P__0 -> P__1 [label = <>, weight = 100]
+{rank = same; P__1 P0__4}
+P0__4 -> P0__5 [label = <>, weight = 100]
+P__1 -> P__2 [label = <>, weight = 100]
+{rank = same; P__2 P0__5}
+P0__5 -> P__2 [label = <~M_6776 = pk(ssprk_6749)>, arrowhead = normal]
+P0__5 -> P0__6 [label = <>, weight = 100]
+P__2 -> P__3 [label = <>, weight = 100]
+{rank = same; P__3 P0__6}
+/*RPar */
+P0__6 -> P0_1__6 [label = <>]
+P0__6 -> P0_0__6 [label = <>]
+P0__6 [label = "", fixedsize = false, width = 0, height = 0, shape = none]
+{rank = same; P0_0__6 P0_1__6}
+P0_0__6 [label = "!", shape = ellipse]
+P0_0_0__6 [label = "", fixedsize = false, width = 0, height = 0, shape = none]
+P0_0__6 -> P0_0_0__6 [label = <>, weight = 100]
+P0_0_0__6 -> P0_0_0__7 [label = <>, weight = 100]
+P0_0_0__7 [shape = plaintext, label = <<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"> <TR><TD>Beginning of process <FONT COLOR="darkgreen">Server</FONT>(pk(ssprk_6749), ssprk_6749)<br/>
+</TD></TR></TABLE>>]
+P0_0_0__7 -> P0_0_0__8 [label = <>, weight = 100]
+P0_1__6 [label = "!", shape = ellipse]
+P0_0_0__8 -> P0_0_0__9 [label = <>, weight = 100]
+P__3 -> P__4 [label = <>, weight = 100]
+{rank = same; P__4 P0_0_0__9}
+P0_0_0__9 -> P0_0_0__10 [label = <>, weight = 100]
+P__4 -> P__5 [label = <>, weight = 100]
+{rank = same; P__5 P0_0_0__10}
+P0_0_0__10 -> P__5 [label = <CHLO>, dir = back, arrowhead = normal]
+P0_0_0__10 -> P0_0_0__11 [label = <>, weight = 100]
+P__5 -> P__6 [label = <>, weight = 100]
+{rank = same; P__6 P0_0_0__11}
+P0_0_0__11 -> P0_0_0__12 [label = <>, weight = 100]
+P0_0_0__12 [shape = plaintext, label = <<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"> <TR><TD><FONT COLOR="darkgreen">{22}</FONT><FONT COLOR="blue">new </FONT>LPri_6748</TD></TR><TR><TD><FONT COLOR="darkgreen">{23}</FONT><FONT COLOR="blue">new </FONT>Token_6750</TD></TR></TABLE>>]
+P0_0_0__12 -> P0_0_0__13 [label = <>, weight = 100]
+P0_0_0__13 -> P0_0_0__14 [label = <>, weight = 100]
+P__6 -> P__7 [label = <>, weight = 100]
+{rank = same; P__7 P0_0_0__14}
+P0_0_0__14 -> P0_0_0__15 [label = <>, weight = 100]
+P__7 -> P__8 [label = <>, weight = 100]
+{rank = same; P__8 P0_0_0__15}
+P0_0_0__15 -> P__8 [label = <(~M_6798,~M_6799,~M_6800,~M_6801) = (exp(g,LPri_6748),<br/>
+sign(exp(g,LPri_6748),ssprk_6749),CertServer,Token_6750)>, arrowhead = normal]
+P0_0_0__15 -> P0_0_0__16 [label = <>, weight = 100]
+P__8 -> P__9 [label = <>, weight = 100]
+{rank = same; P__9 P0_0_0__16}
+P0_0_0__16 -> P0_0_0__17 [label = <>, weight = 100]
+P__9 -> P__10 [label = <>, weight = 100]
+{rank = same; P__10 P0_0_0__17}
+P0_0_0__17 -> P0_0_0__18 [label = <>, weight = 100]
+P__10 -> P__11 [label = <>, weight = 100]
+{rank = same; P__11 P0_0_0__18}
+P0_0_0__18 -> P__11 [label = <(g,enc(a_6747,~M_6798)) = (g,enc(a_6747,exp(g,<br/>
+LPri_6748)))>, dir = back, arrowhead = normal]
+P0_0_0__18 -> P0_0_0__19 [label = <>, weight = 100]
+P__11 -> P__12 [label = <>, weight = 100]
+{rank = same; P__12 P0_0_0__19}
+P0_0_0__19 -> P0_0_0__20 [label = <>, weight = 100]
+P0_0_0__20 [color = red, shape = plaintext, label = <<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="4"> <TR><TD><FONT COLOR="darkgreen">{28}</FONT><FONT COLOR="blue">event</FONT> acceptReqM(a_6747)</TD></TR></TABLE>>]
+P0_0_0__20 -> P0_0_0__21 [label = <>, weight = 100]
+}
