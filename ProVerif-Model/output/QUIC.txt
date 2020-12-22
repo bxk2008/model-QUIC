@@ -1,0 +1,325 @@
+File "C:\Users\bxk20\Desktop\ProVerif\proverifbsd2.00\proverif2.00\examples\QUIC-v1-fs-initk.pv", line 85, characters 6-11:
+Warning: identifier InitKC rebound.
+File "C:\Users\bxk20\Desktop\ProVerif\proverifbsd2.00\proverif2.00\examples\QUIC-v1-fs-initk.pv", line 104, characters 6-11:
+Warning: identifier InitKS rebound.
+Linear part:
+exp(exp(g,x),y) = exp(exp(g,y),x)
+Completing equations...
+Completed equations:
+exp(exp(g,x),y) = exp(exp(g,y),x)
+Convergent part:
+Completing equations...
+Completed equations:
+Process:
+{1}new skS: skey;
+{2}new InitKC: G;
+{3}new InitKS: G;
+{4}let pkS: pkey = pk(skS) in
+{5}out(c, pkS);
+(
+    {6}!
+    {7}out(c, CHLO);
+    {8}in(c, (x1: G,x2: bitstring,x3: bitstring,x4: bitstring));
+    {9}let =x1 = checksign(x2,pkS) in
+    {10}new CEPri: exponent;
+    {11}let InitKC_37: G = exp(x1,CEPri) in
+    {12}event InitC(CHLO);
+    {13}event sendReqM(ReqM);
+    {14}out(c, (exp(g,CEPri),enc(ReqM,InitKC_37)));
+    {15}in(c, (x5: G,x6: bitstring));
+    {16}let x7: G = decP(x5,InitKC_37) in
+    {17}let FSKC: G = exp(x7,CEPri) in
+    {18}let ResMx: bitstring = dec(x6,FSKC) in
+    {19}event acceptResM(ResMx);
+    {20}event EndC(x1)
+) | (
+    {21}!
+    {22}in(c, x1_38: bitstring);
+    {23}if (x1_38 = CHLO) then
+    {24}new LPri: exponent;
+    {25}new Token: bitstring;
+    {26}out(c, (exp(g,LPri),sign(exp(g,LPri),skS),CertServer,Token));
+    {27}in(c, (x2_39: G,x3_40: bitstring));
+    {28}let InitKS_41: G = exp(x2_39,LPri) in
+    {29}let ReqMx: bitstring = dec(x3_40,InitKS_41) in
+    {30}event acceptReqM(ReqMx);
+    {31}new SEPri: exponent;
+    {32}let SEPub: G = exp(g,SEPri) in
+    {33}let FSKS: G = exp(x2_39,SEPri) in
+    {34}event InitS(exp(g,LPri));
+    {35}event sendResM(ResM);
+    {36}out(c, (encP(SEPub,InitKS_41),enc(ResM,FSKS)));
+    {37}event EndS(x1_38)
+) | (
+    {38}phase 1;
+    {39}out(c, InitKC)
+)
+
+-- Query not attacker_p1(ReqM[])
+Completing...
+200 rules inserted. The rule base contains 130 rules. 29 rules in the queue.
+Starting query not attacker_p1(ReqM[])
+RESULT not attacker_p1(ReqM[]) is true.
+-- Query not attacker_p1(ResM[])
+Completing...
+200 rules inserted. The rule base contains 130 rules. 29 rules in the queue.
+Starting query not attacker_p1(ResM[])
+goal reachable: attacker_p1(ResM[])
+Abbreviations:
+LPri_5650 = LPri[x1_38 = CHLO[],!1 = @sid_5644]
+SEPri_5651 = SEPri[x3_40 = enc(ReqMx_5643,exp(g,LPri_5650)),x2_39 = g,x1_38 = CHLO[],!1 = @sid_5644]
+Token_5652 = Token[x1_38 = CHLO[],!1 = @sid_5644]
+
+1. The attacker initially knows CHLO[].
+attacker(CHLO[]).
+
+2. The message CHLO[] that the attacker may have by 1 may be received at input {22}.
+So the message (exp(g,LPri_5650),sign(exp(g,LPri_5650),skS[]),CertServer[],Token_5652) may be sent to the attacker at output {26}.
+attacker((exp(g,LPri_5650),sign(exp(g,LPri_5650),skS[]),CertServer[],Token_5652)).
+
+3. By 2, the attacker may know (exp(g,LPri_5650),sign(exp(g,LPri_5650),skS[]),CertServer[],Token_5652).
+Using the function 1-proj-4-tuple the attacker may obtain exp(g,LPri_5650).
+attacker(exp(g,LPri_5650)).
+
+4. The attacker has some term ReqMx_5643.
+attacker(ReqMx_5643).
+
+5. By 4, the attacker may know ReqMx_5643.
+By 3, the attacker may know exp(g,LPri_5650).
+Using the function enc the attacker may obtain enc(ReqMx_5643,exp(g,LPri_5650)).
+attacker(enc(ReqMx_5643,exp(g,LPri_5650))).
+
+6. Using the function g the attacker may obtain g.
+attacker(g).
+
+7. By 6, the attacker may know g.
+By 5, the attacker may know enc(ReqMx_5643,exp(g,LPri_5650)).
+Using the function 2-tuple the attacker may obtain (g,enc(ReqMx_5643,exp(g,LPri_5650))).
+attacker((g,enc(ReqMx_5643,exp(g,LPri_5650)))).
+
+8. The message CHLO[] that the attacker may have by 1 may be received at input {22}.
+The message (g,enc(ReqMx_5643,exp(g,LPri_5650))) that the attacker may have by 7 may be received at input {27}.
+So the message (encP(exp(g,SEPri_5651),exp(g,LPri_5650)),enc(ResM[],exp(g,SEPri_5651))) may be sent to the attacker at output {36}.
+attacker((encP(exp(g,SEPri_5651),exp(g,LPri_5650)),enc(ResM[],exp(g,SEPri_5651)))).
+
+9. By 8, the attacker may know (encP(exp(g,SEPri_5651),exp(g,LPri_5650)),enc(ResM[],exp(g,SEPri_5651))).
+Using the function 1-proj-2-tuple the attacker may obtain encP(exp(g,SEPri_5651),exp(g,LPri_5650)).
+attacker(encP(exp(g,SEPri_5651),exp(g,LPri_5650))).
+
+10. By 9, the attacker may know encP(exp(g,SEPri_5651),exp(g,LPri_5650)).
+By 3, the attacker may know exp(g,LPri_5650).
+Using the function decP the attacker may obtain exp(g,SEPri_5651).
+attacker(exp(g,SEPri_5651)).
+
+11. By 8, the attacker may know (encP(exp(g,SEPri_5651),exp(g,LPri_5650)),enc(ResM[],exp(g,SEPri_5651))).
+Using the function 2-proj-2-tuple the attacker may obtain enc(ResM[],exp(g,SEPri_5651)).
+attacker(enc(ResM[],exp(g,SEPri_5651))).
+
+12. By 11, the attacker may know enc(ResM[],exp(g,SEPri_5651)).
+By 10, the attacker may know exp(g,SEPri_5651).
+Using the function dec the attacker may obtain ResM[].
+attacker(ResM[]).
+
+13. By 12, the attacker may know ResM[].
+So the attacker may know ResM[] in phase 1.
+attacker_p1(ResM[]).
+
+
+A more detailed output of the traces is available with
+  set traceDisplay = long.
+
+new skS: skey creating skS_5662 at {1}
+
+new InitKC: G creating InitKC_5673 at {2}
+
+new InitKS: G creating InitKS_5674 at {3}
+
+out(c, ~M_5692) with ~M_5692 = pk(skS_5662) at {5}
+
+in(c, CHLO) at {22} in copy a_5653
+
+new LPri: exponent creating LPri_5654 at {24} in copy a_5653
+
+new Token: bitstring creating Token_5663 at {25} in copy a_5653
+
+out(c, (~M_5713,~M_5714,~M_5715,~M_5716)) with ~M_5713 = exp(g,LPri_5654), ~M_5714 = sign(exp(g,LPri_5654),skS_5662), ~M_5715 = CertServer, ~M_5716 = Token_5663 at {26} in copy a_5653
+
+in(c, (g,enc(a,~M_5713))) with enc(a,~M_5713) = enc(a,exp(g,LPri_5654)) at {27} in copy a_5653
+
+event acceptReqM(a) at {30} in copy a_5653
+
+new SEPri: exponent creating SEPri_5655 at {31} in copy a_5653
+
+event InitS(exp(g,LPri_5654)) at {34} in copy a_5653
+
+event sendResM(ResM) at {35} in copy a_5653
+
+out(c, (~M_5738,~M_5739)) with ~M_5738 = encP(exp(g,SEPri_5655),exp(g,LPri_5654)), ~M_5739 = enc(ResM,exp(g,SEPri_5655)) at {36} in copy a_5653
+
+event EndS(CHLO) at {37} in copy a_5653
+
+The attacker has the message dec(~M_5739,decP(~M_5738,~M_5713)) = ResM in phase 1.
+A trace has been found.
+RESULT not attacker_p1(ResM[]) is false.
+-- Query inj-event(acceptReqM(x_82)) ==> inj-event(sendReqM(x_82))
+Completing...
+200 rules inserted. The rule base contains 127 rules. 36 rules in the queue.
+Starting query inj-event(acceptReqM(x_82)) ==> inj-event(sendReqM(x_82))
+goal reachable: attacker(x_9153) -> end(endsid_9154,acceptReqM(x_9153))
+Abbreviations:
+LPri_9177 = LPri[x1_38 = CHLO[],!1 = endsid_9175]
+Token_9178 = Token[x1_38 = CHLO[],!1 = endsid_9175]
+
+1. The attacker initially knows CHLO[].
+attacker(CHLO[]).
+
+2. The message CHLO[] that the attacker may have by 1 may be received at input {22}.
+So the message (exp(g,LPri_9177),sign(exp(g,LPri_9177),skS[]),CertServer[],Token_9178) may be sent to the attacker at output {26}.
+attacker((exp(g,LPri_9177),sign(exp(g,LPri_9177),skS[]),CertServer[],Token_9178)).
+
+3. By 2, the attacker may know (exp(g,LPri_9177),sign(exp(g,LPri_9177),skS[]),CertServer[],Token_9178).
+Using the function 1-proj-4-tuple the attacker may obtain exp(g,LPri_9177).
+attacker(exp(g,LPri_9177)).
+
+4. We assume as hypothesis that
+attacker(x_9176).
+
+5. By 4, the attacker may know x_9176.
+By 3, the attacker may know exp(g,LPri_9177).
+Using the function enc the attacker may obtain enc(x_9176,exp(g,LPri_9177)).
+attacker(enc(x_9176,exp(g,LPri_9177))).
+
+6. Using the function g the attacker may obtain g.
+attacker(g).
+
+7. By 6, the attacker may know g.
+By 5, the attacker may know enc(x_9176,exp(g,LPri_9177)).
+Using the function 2-tuple the attacker may obtain (g,enc(x_9176,exp(g,LPri_9177))).
+attacker((g,enc(x_9176,exp(g,LPri_9177)))).
+
+8. The message CHLO[] that the attacker may have by 1 may be received at input {22}.
+The message (g,enc(x_9176,exp(g,LPri_9177))) that the attacker may have by 7 may be received at input {27}.
+So event acceptReqM(x_9176) may be executed at {30} in session endsid_9175.
+end(endsid_9175,acceptReqM(x_9176)).
+
+
+A more detailed output of the traces is available with
+  set traceDisplay = long.
+
+new skS: skey creating skS_9182 at {1}
+
+new InitKC: G creating InitKC_9191 at {2}
+
+new InitKS: G creating InitKS_9192 at {3}
+
+out(c, ~M_9211) with ~M_9211 = pk(skS_9182) at {5}
+
+in(c, CHLO) at {22} in copy a_9179
+
+new LPri: exponent creating LPri_9181 at {24} in copy a_9179
+
+new Token: bitstring creating Token_9183 at {25} in copy a_9179
+
+out(c, (~M_9233,~M_9234,~M_9235,~M_9236)) with ~M_9233 = exp(g,LPri_9181), ~M_9234 = sign(exp(g,LPri_9181),skS_9182), ~M_9235 = CertServer, ~M_9236 = Token_9183 at {26} in copy a_9179
+
+in(c, (g,enc(a_9180,~M_9233))) with enc(a_9180,~M_9233) = enc(a_9180,exp(g,LPri_9181)) at {27} in copy a_9179
+
+event acceptReqM(a_9180) at {30} in copy a_9179 (goal)
+
+The event acceptReqM(a_9180) is executed in session a_9179.
+A trace has been found.
+RESULT inj-event(acceptReqM(x_82)) ==> inj-event(sendReqM(x_82)) is false.
+RESULT (even event(acceptReqM(x_9160)) ==> event(sendReqM(x_9160)) is false.)
+-- Query inj-event(acceptResM(x_83)) ==> inj-event(sendResM(x_83))
+Completing...
+200 rules inserted. The rule base contains 137 rules. 26 rules in the queue.
+400 rules inserted. The rule base contains 258 rules. 42 rules in the queue.
+Starting query inj-event(acceptResM(x_83)) ==> inj-event(sendResM(x_83))
+goal reachable: begin(sendResM(ResM[]), x3_40 = enc(ReqM[],exp(exp(g,CEPri[x4 = x4_15792,x3 = x3_15793,x2 = sign(exp(g,LPri[x1_38 = CHLO[],!1 = @sid_15794]),skS[]),x1 = exp(g,LPri[x1_38 = CHLO[],!1 = @sid_15794]),!1 = endsid_15795]),LPri[x1_38 = CHLO[],!1 = @sid_15794])), x2_39 = exp(g,CEPri[x4 = x4_15792,x3 = x3_15793,x2 = sign(exp(g,LPri[x1_38 = CHLO[],!1 = @sid_15794]),skS[]),x1 = exp(g,LPri[x1_38 = CHLO[],!1 = @sid_15794]),!1 = endsid_15795]), x1_38 = CHLO[], @sid_627 = @sid_15794, @occ35 = @occ_cst) && attacker(x3_15793) && attacker(x4_15792) -> end(endsid_15795,acceptResM(ResM[]))
+RESULT inj-event(acceptResM(x_83)) ==> inj-event(sendResM(x_83)) is true.
+-- Query inj-event(EndS(x_84)) ==> inj-event(InitC(x_84))
+Completing...
+200 rules inserted. The rule base contains 127 rules. 34 rules in the queue.
+Starting query inj-event(EndS(x_84)) ==> inj-event(InitC(x_84))
+goal reachable: end(endsid_19161,EndS(CHLO[]))
+Abbreviations:
+LPri_19178 = LPri[x1_38 = CHLO[],!1 = endsid_19176]
+Token_19179 = Token[x1_38 = CHLO[],!1 = endsid_19176]
+
+1. The attacker initially knows CHLO[].
+attacker(CHLO[]).
+
+2. The message CHLO[] that the attacker may have by 1 may be received at input {22}.
+So the message (exp(g,LPri_19178),sign(exp(g,LPri_19178),skS[]),CertServer[],Token_19179) may be sent to the attacker at output {26}.
+attacker((exp(g,LPri_19178),sign(exp(g,LPri_19178),skS[]),CertServer[],Token_19179)).
+
+3. By 2, the attacker may know (exp(g,LPri_19178),sign(exp(g,LPri_19178),skS[]),CertServer[],Token_19179).
+Using the function 1-proj-4-tuple the attacker may obtain exp(g,LPri_19178).
+attacker(exp(g,LPri_19178)).
+
+4. The attacker has some term ReqMx_19174.
+attacker(ReqMx_19174).
+
+5. By 4, the attacker may know ReqMx_19174.
+By 3, the attacker may know exp(g,LPri_19178).
+Using the function enc the attacker may obtain enc(ReqMx_19174,exp(g,LPri_19178)).
+attacker(enc(ReqMx_19174,exp(g,LPri_19178))).
+
+6. Using the function g the attacker may obtain g.
+attacker(g).
+
+7. By 6, the attacker may know g.
+By 5, the attacker may know enc(ReqMx_19174,exp(g,LPri_19178)).
+Using the function 2-tuple the attacker may obtain (g,enc(ReqMx_19174,exp(g,LPri_19178))).
+attacker((g,enc(ReqMx_19174,exp(g,LPri_19178)))).
+
+8. The message CHLO[] that the attacker may have by 1 may be received at input {22}.
+The message (g,enc(ReqMx_19174,exp(g,LPri_19178))) that the attacker may have by 7 may be received at input {27}.
+So event EndS(CHLO[]) may be executed at {37} in session endsid_19176.
+end(endsid_19176,EndS(CHLO[])).
+
+
+A more detailed output of the traces is available with
+  set traceDisplay = long.
+
+new skS: skey creating skS_19183 at {1}
+
+new InitKC: G creating InitKC_19192 at {2}
+
+new InitKS: G creating InitKS_19193 at {3}
+
+out(c, ~M_19212) with ~M_19212 = pk(skS_19183) at {5}
+
+in(c, CHLO) at {22} in copy a_19180
+
+new LPri: exponent creating LPri_19182 at {24} in copy a_19180
+
+new Token: bitstring creating Token_19184 at {25} in copy a_19180
+
+out(c, (~M_19234,~M_19235,~M_19236,~M_19237)) with ~M_19234 = exp(g,LPri_19182), ~M_19235 = sign(exp(g,LPri_19182),skS_19183), ~M_19236 = CertServer, ~M_19237 = Token_19184 at {26} in copy a_19180
+
+in(c, (g,enc(a_19181,~M_19234))) with enc(a_19181,~M_19234) = enc(a_19181,exp(g,LPri_19182)) at {27} in copy a_19180
+
+event acceptReqM(a_19181) at {30} in copy a_19180
+
+new SEPri: exponent creating SEPri_19256 at {31} in copy a_19180
+
+event InitS(exp(g,LPri_19182)) at {34} in copy a_19180
+
+event sendResM(ResM) at {35} in copy a_19180
+
+out(c, (~M_19260,~M_19261)) with ~M_19260 = encP(exp(g,SEPri_19256),exp(g,LPri_19182)), ~M_19261 = enc(ResM,exp(g,SEPri_19256)) at {36} in copy a_19180
+
+event EndS(CHLO) at {37} in copy a_19180 (goal)
+
+The event EndS(CHLO) is executed in session a_19180.
+A trace has been found.
+RESULT inj-event(EndS(x_84)) ==> inj-event(InitC(x_84)) is false.
+RESULT (even event(EndS(x_19162)) ==> event(InitC(x_19162)) is false.)
+-- Query inj-event(EndC(x_85)) ==> inj-event(InitS(x_85))
+Completing...
+200 rules inserted. The rule base contains 133 rules. 23 rules in the queue.
+400 rules inserted. The rule base contains 233 rules. 3 rules in the queue.
+Starting query inj-event(EndC(x_85)) ==> inj-event(InitS(x_85))
+goal reachable: begin(InitS(exp(g,LPri[x1_38 = CHLO[],!1 = @sid_24630])), x3_40 = enc(ReqM[],exp(exp(g,CEPri[x4 = x4_24628,x3 = x3_24629,x2 = sign(exp(g,LPri[x1_38 = CHLO[],!1 = @sid_24630]),skS[]),x1 = exp(g,LPri[x1_38 = CHLO[],!1 = @sid_24630]),!1 = endsid_24631]),LPri[x1_38 = CHLO[],!1 = @sid_24630])), x2_39 = exp(g,CEPri[x4 = x4_24628,x3 = x3_24629,x2 = sign(exp(g,LPri[x1_38 = CHLO[],!1 = @sid_24630]),skS[]),x1 = exp(g,LPri[x1_38 = CHLO[],!1 = @sid_24630]),!1 = endsid_24631]), x1_38 = CHLO[], @sid_627 = @sid_24630, @occ34 = @occ_cst) && attacker(x3_24629) && attacker(x4_24628) -> end(endsid_24631,EndC(exp(g,LPri[x1_38 = CHLO[],!1 = @sid_24630])))
+RESULT inj-event(EndC(x_85)) ==> inj-event(InitS(x_85)) is true.
